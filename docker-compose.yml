@@ -16,7 +16,7 @@ services:
   web:
     image: drupal:7.52
     volumes: 
-      - ./sites/:/var/www/html/sites/
+      - ./sites:/var/www/html/sites
     ports:
       - "5000:80"
     links:
