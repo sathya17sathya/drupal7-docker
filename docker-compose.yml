@@ -14,9 +14,9 @@ services:
   redis:
     image: redis
   web:
-    image: drupal:7.52
+    image: drupal:7.53
     volumes: 
-      - ./sites:/var/www/html/sites
+      - ./drupal-7.53:/var/www/html
     ports:
       - "5000:80"
     links:
