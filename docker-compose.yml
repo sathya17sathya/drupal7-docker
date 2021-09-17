@@ -1,7 +1,7 @@
 version: '2'
 services:
   db:
-    image: mysql:5.5
+    image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=drupal
@@ -11,14 +11,27 @@ services:
       - "3306"
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
-  redis:
-    image: redis
+  redis-master:
+    container_name: redis-master
+    image: redis:latest
+    command: redis-server --port 6379
+    ports:
+      - "6379:6379"
+    volumes:
+      - .:/app
+  redis-slave:
+    container_name: redis-slave
+    image: redis:latest
+    command: redis-server --slaveof redis-master 6379
+    volumes:
+       - .:/app
   web:
-    image: drupal:7.53
+    image: drupal:latest
     volumes: 
       - ./sites:/var/www/html/sites
     ports:
-      - "5000:80"
+      - "8080:80"
     links:
-      - redis
+      - redis-master
+      - redis-slave
       - db
